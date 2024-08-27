@@ -12,6 +12,7 @@ pipeline {
                 docker {
                     image 'maven:3.9.2'
                     args '-v ./.m2/:./.m2'
+                    reuseNode true
                 }
             }            
             steps {
@@ -24,6 +25,7 @@ pipeline {
                 docker {
                     image 'maven:3.9.2'
                     args '-v ./.m2/:./.m2'
+                    reuseNode true
                 }
             }            
             steps {
@@ -40,6 +42,7 @@ pipeline {
                 docker {
                     image 'maven:3.9.2'
                     args '-v ./.m2/:./.m2'
+                    reuseNode true
                 }
             }
             steps {
@@ -51,6 +54,7 @@ pipeline {
                 docker {
                     image 'maven:3.9.2'
                     args '-v ./.m2/:./.m2'
+                    reuseNode true
                 }
             }
             steps {
