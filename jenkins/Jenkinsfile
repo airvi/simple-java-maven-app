@@ -1,33 +1,17 @@
 pipeline {
-    agent {label 'master'}
-    stages {
-        stage("Fix the permission issue") {
-            agent any
-            steps {
-                sh "sudo chown root:jenkins /run/docker.sock"
-            }
+    agent {
+        docker {
+            image 'maven:3.9.2'
+            args '-u root -v /root/.m2:/root/.m2'
         }
+    }
+    stages {
         stage('Build') {
-            agent {
-                docker {
-                    image 'maven:3.9.2'
-                    args '-v ./.m2/:./.m2'
-                    reuseNode true
-                }
-            }            
             steps {
-                sh 'ip a'
                 sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Test') {
-            agent {
-                docker {
-                    image 'maven:3.9.2'
-                    args '-v ./.m2/:./.m2'
-                    reuseNode true
-                }
-            }            
             steps {
                 sh 'mvn test'
             }
@@ -37,26 +21,7 @@ pipeline {
                 }
             }
         }
-        stage('Artifact') {
-            agent {
-                docker {
-                    image 'maven:3.9.2'
-                    args '-v ./.m2/:./.m2'
-                    reuseNode true
-                }
-            }
-            steps {
-                archiveArtifacts artifacts: 'target/*.jar'
-            }
-        }
         stage('Deliver') {
-            agent {
-                docker {
-                    image 'maven:3.9.2'
-                    args '-v ./.m2/:./.m2'
-                    reuseNode true
-                }
-            }
             steps {
                 sh './jenkins/scripts/deliver.sh'
             }
